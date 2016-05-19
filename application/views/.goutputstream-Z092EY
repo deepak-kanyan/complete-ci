@@ -1,0 +1,641 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<?php if(isset($top_head)){ echo $top_head; } ?>
+
+<!-- for Facebook --> 
+
+<?php $image_share = base_url().'uploads/'.$vehicle_data['images'][0]['image']; ?>
+
+<meta property="og:title" content="<?php echo $title;?>"/>
+<meta property="og:image" content="<?php echo $image_share; ?>"/>
+<meta property="og:site_name" content="Car2udirect"/>
+<meta property="og:description" content="<?php echo $vehicle_data['description']; ?>"/>
+<meta property="og:type" content="article" />	
+<meta property="og:image:width" content="600" />
+<meta property="og:image:height" content="400" /> 
+
+<!-- for Twitter -->          
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@car2udirect" />
+<meta name="twitter:creator" content="@car2udirect" />
+<meta name="twitter:title" content="<?php echo $title;?>" />
+<meta name="twitter:description" content="<?php echo $vehicle_data['description']; ?>" />
+<meta name="twitter:image" content="<?php echo $image_share; ?>" />
+<script type="text/javascript">
+  $(function(){
+		$("#nav").addClass("js").before('<div id="menu"><img src="<?php echo base_url(); ?>assets/frontend/images/menu1.png"/></div>');	
+			$("#menu").click(function(){
+				$("#nav").slideToggle();
+			});
+
+	});
+		  jQuery(window).resize(function(){
+			  if(window.innerWidth >990) {
+				jQuery("#nav").removeAttr("style");
+			  }
+		  });
+			jQuery(document).ready(function(){
+				jQuery(".slidesjs-pagination-item li").each( function(){
+					jQuery(this).addClass("abc");
+				});
+				setTimeout(function() {
+					$('#mydiv').fadeOut('fast');
+				}, 1000);
+				
+				setTimeout(function() {
+					$('#message').fadeOut('slow');
+					
+				}, 3000);
+			});
+		
+</script>	
+</head>
+
+<body>
+	<!-----header-start----->
+	<header class="inner-header">		
+		<div class="header-outer">			
+			<div class="logo"> 
+				<a href="<?php echo base_url(); ?>">
+					<img src="<?php echo base_url(); ?>assets/frontend/images/inner-logo.jpg"/> 
+				</a>
+			</div>
+			<div class="right-div">	
+				<nav>
+					<ul id="nav" class="inner-menu">
+						<?php if(isset($menu)){ echo $menu; } ?>
+					</ul>
+				</nav>					
+				<div class="header-btn">
+					<?php if($this->session->userdata('logged_in')!='' || $this->session->userdata('logged_in')!=null){
+						 ?>
+						<a href="<?php echo base_url(); ?>myprofile" class="sign-up-inner"> Profile </a>
+						<a href="<?php echo base_url().'logout'; ?>" class="login sign-up-inner"> Logout </a>
+						  <?php 
+						   }
+						   else
+						   {  
+							?>
+						   <a href="<?php echo base_url().'signup' ; ?>" class="<?php if(isset($active) && $active=='signup') echo 'active'; ?> sign-up-inner"> Sign up </a>
+							<a href="<?php echo base_url().'login'; ?>" class="login <?php if(isset($active) && $active=='login') echo 'active'; ?> sign-up-inner"> Login </a>
+							
+							<?php } ?>
+				</div>
+			</div>			
+		</div>
+	</header>
+	<!-----header-end----->	
+	
+		<div class="page-heading-outer">
+		
+		<div class="wrapper">
+			<div class="page-heading-main">
+				<h1><?php echo ucwords($vehicle_data['year'].' '.$vehicle_data['make'].' '.$vehicle_data['model']);  ?></h1>
+				<p><?php echo ucwords($vehicle_data['style_name']); ?></p>
+			</div>
+			<div class="page-social-link">
+				
+				<?php $share_url = base_url().'view/'.$vehicle_data['vechicle_id'].'/'.$vehicle_data['make'].'/'.$vehicle_data['model'].'/'.$vehicle_data['year'];  ?>
+				
+				<a href="http://www.facebook.com/share.php?u=<?php echo $share_url; ?>&title=<?php echo $title; ?>" target="_blank"><img src="<?php echo base_url(); ?>assets/frontend/images/s-fb.png"/></a>
+								
+				<a target="_blank" href="https://twitter.com/share?url=<?php echo $share_url;  ?>&text=<?php echo str_replace('|','-',$title); ?>"><img src="<?php echo base_url(); ?>assets/frontend/images/s-tw.png"/></a>
+				
+			</div>
+		</div>
+		
+	</div>
+	
+	<div class="detail-page-outer">
+		<div class="wrapper">
+			<div class="detail-inner-block-main">
+				<div class="detail-slider-block">
+					
+					<div class="main-slider">
+						
+						<ul class="list-bxslider">
+							<?php
+							foreach($vehicle_data['images'] AS $images){
+															
+								if(file_exists(FCPATH."uploads/".$images['image']))
+								{
+									$path=base_url().'uploads/'.$images['image']; 
+								}
+								else
+								{
+									$path = base_url().'assets/frontend/images/lc1.png'; 
+								}											
+							?>
+							<li>
+								<img src='<?php echo $path; ?>'/>
+							</li>
+						
+							<?php 
+							}
+							?>
+						</ul>
+						
+					</div>
+					
+					<div class="slide-thumb" id="bx-pager">
+						<div href="javascript:;" class="pre-arr"  id="slider-prev"></div>
+						<div href="javascript:;" class="nxt-arr" id="slider-next"></div>
+						
+						<ul id="thumb_slider">
+						<?php 
+							$key = 0;
+							foreach($vehicle_data['images'] AS $images){
+								if(file_exists(FCPATH."uploads/thumbnail/300_".$images['image']))
+								{
+									$path=base_url().'uploads/thumbnail/'.'300_'.$images['image']; 
+								}
+								else
+								{
+									$path = base_url().'assets/frontend/images/lc1.png'; 
+								}
+						?>
+							<li>
+								<a data-slide-index="<?php echo $key; ?>" href="">
+									<img src='<?php echo $path; ?>' />	
+								</a>
+							</li>
+						<?php 
+						$key++;
+						}
+						?>
+						</ul>
+					</div>
+				
+				</div>
+				<div class="detail-right-image-block">
+					<div class="mile-txt-detail-block">
+						<div class="block-txt-mile1">
+							<p>No-Haggle Price</p>
+							<h1>$<?php echo (int) $vehicle_data['our_price']; ?></h1>
+						</div>
+						<div class="block-txt-mile1 block-txt-mile2">
+							<p>Mileage </p>
+							<h1><?php echo $vehicle_data['mileage']; ?></h1>
+						</div>
+					</div>
+					<div class="icon-block-detail">
+						<a id="p_o_m" title="" href="#"><img src="<?php echo base_url(); ?>assets/frontend/images/d11.png"/></a>
+						<a id="ten_days" title="" href="#"><img src="<?php echo base_url(); ?>assets/frontend/images/d12.png"/></a>
+						<a id="full_war" title="" href="#"><img src="<?php echo base_url(); ?>assets/frontend/images/d13.png"/></a>
+						<a id="drive_train" title="" href="#"><img src="<?php echo base_url(); ?>assets/frontend/images/d14.png"/></a>
+					</div>
+					<div class="car-price-block">
+						<h2 class="main-h2">A Car2udirect' Amazing No Haggle Price</h2>
+						<div class="car-price">
+							<div class="car-price1"><h2>Car2udirect <span>$<?php echo (int) $vehicle_data['our_price']; ?></span></h2></div>
+							<div class="car-price1 car-price2"><h2>(Edmunds)<span><strike>$<?php echo (int) $vehicle_data['tmv_price']; ?></strike></span> </h2></div>
+						</div>
+						<div class="black-price-block">
+							<h2><strike>$<?php echo (int) $vehicle_data['pp_price']; ?> </strike>Salesman Price</h2>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="button-silde-block">
+				<a href="#" class="book"><i></i><span>Book a Test Drive</span></a>
+				<a href="#" class="offer"><i></i><span>offer a price</span></a>
+				<a href="#" class="live-demo"><i></i><span>LIVE DEMO</span></a>
+				<a href="#" class="buy-now"><i></i><span>BUY NOW</span></a>
+			</div>
+		</div>
+	</div>
+	<div class="straight-bar">
+		<div class="wrapper">
+			<p>Straight to your driveway, ready to drive!<span> Car2UDirect delivery to </span></p>
+			<input type="text" id="zip_code" placeholder="Zip" class="zip" autocomplete="off">
+			<b id="zip_result">+ delivery</b>
+		</div>
+	</div>
+	<div class="key-feature">
+		<div class="wrapper">
+			<h3>Key Features</h3>
+			<div class="icon-silder">
+			<div class="pre"></div>
+			<div class="nxt"></div>				
+			<div class="icon-block-key">
+				
+				<ul class="icon-block-key-inner">
+					<li class="block-icon1">
+						<div class="block-icon1-tb">
+							<div class="block-icon1-tb-cell">
+								<img src="<?php echo base_url(); ?>assets/frontend/images/bluetooth.png"/>
+							</div>
+						</div>
+					</li>
+					<li class="block-icon1">
+						<div class="block-icon1-tb">
+							<div class="block-icon1-tb-cell">
+								<img src="<?php echo base_url(); ?>assets/frontend/images/i2.png"/>
+							</div>
+						</div>
+					</li>
+					<li class="block-icon1">
+						<div class="block-icon1-tb">
+							<div class="block-icon1-tb-cell">
+								<img src="<?php echo base_url(); ?>assets/frontend/images/i3.png"/>
+							</div>
+						</div>
+					</li>
+					<li class="block-icon1">
+						<div class="block-icon1-tb">
+							<div class="block-icon1-tb-cell">
+								<img src="<?php echo base_url(); ?>assets/frontend/images/i4.png"/>
+							</div>
+						</div>
+					</li>
+					<li class="block-icon1">
+						<div class="block-icon1-tb">
+							<div class="block-icon1-tb-cell">
+								<img src="<?php echo base_url(); ?>assets/frontend/images/i5.png"/>
+							</div>
+						</div>
+					</li>
+					<li class="block-icon1">
+						<div class="block-icon1-tb">
+							<div class="block-icon1-tb-cell">
+								<img src="<?php echo base_url(); ?>assets/frontend/images/i6.png"/>
+							</div>
+						</div>
+					</li>
+					<li class="block-icon1">
+						<div class="block-icon1-tb">
+							<div class="block-icon1-tb-cell">
+								<img src="<?php echo base_url(); ?>assets/frontend/images/i7.png"/>
+							</div>
+						</div>
+					</li>
+					<li class="block-icon1">
+						<div class="block-icon1-tb">
+							<div class="block-icon1-tb-cell">
+								<img src="<?php echo base_url(); ?>assets/frontend/images/i8.png"/>
+							</div>
+						</div>
+					</li>
+					<li class="block-icon1">
+						<div class="block-icon1-tb">
+							<div class="block-icon1-tb-cell">
+								<img src="<?php echo base_url(); ?>assets/frontend/images/i9.png"/>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+			</div>
+			<div class="key-spacification">
+				<div class="key-left-block">
+					<div class="key-block11">
+						<h2>Key Specifications</h2>
+						<h3>Gas Mileage</h3>
+						<div class="circle-block">
+							<div class="circle-1-main">
+								<p><?php echo $vehicle_data['city']; ?><span>City</span></p>
+							</div>
+							<div class="circle-1-main blue">
+								<p><?php echo $vehicle_data['highway']; ?><span>Highway</span></p>
+							</div>
+						</div>
+					</div>
+					<div class="key-block11 key-block12 nc-scrol">
+						<h2>Base Specifications</h2>
+						
+						<div class="Base-container">
+							<div class="base-row1"><p>VIN <span><?php echo ucwords($vehicle_data['vin']); ?> </span></p></div>
+							<div class="base-row1"><p>Body type <span><?php echo ucwords($vehicle_data['vehicle_style']); ?> </span></p></div>
+							<div class="base-row1"><p>Color <span><?php echo ucwords($vehicle_data['color_name']); ?> </span></p></div>
+							<div class="base-row1"><p>Transmission <span><?php echo ucwords($vehicle_data['transmission_type']); ?> </span></p></div>
+							<div class="base-row1"><p>Number of doors <span><?php echo ucwords($vehicle_data['num_of_doors']); ?> </span></p></div>							
+							<div class="base-row1"><p>Driven wheels <span><?php echo ucwords($vehicle_data['driven_wheels']); ?> </span></p></div>
+							<div class="base-row1"><p>Fuel type <span><?php echo ucwords($vehicle_data['fuel_type']); ?> </span></p></div>
+							<div class="base-row1"><p>Number of cylinders <span><?php echo ucwords($vehicle_data['cylinder']); ?> </span></p></div>
+							<div class="base-row1"><p>Total valves <span><?php echo ucwords($vehicle_data['total_valves']); ?> </span></p></div>
+							<div class="base-row1"><p>Engine size <span><?php echo ucwords($vehicle_data['engine_size']); ?> </span></p></div>
+							<div class="base-row1"><p>Engine displacement <span><?php echo ucwords($vehicle_data['displacement']); ?> </span></p></div>
+							<div class="base-row1"><p>Configuration <span><?php echo ucwords($vehicle_data['configuration']); ?> </span></p></div>
+							<div class="base-row1"><p>Torque <span><?php echo ucwords($vehicle_data['torque']); ?> </span></p></div>
+							<div class="base-row1"><p>Horsepower <span><?php echo ucwords($vehicle_data['horsepower']); ?> </span></p></div>
+							<div class="base-row1"><p>Compressor type <span><?php echo ucwords($vehicle_data['compressor_type']); ?> </span></p></div>
+							<div class="base-row1"><p>Compression ratio <span><?php echo ucwords($vehicle_data['compression_ratio']); ?> </span></p></div>
+							
+							
+						</div>
+					</div>
+				</div>
+				<div class="key-right-block">
+					<div class="key-block11">
+						<h2>More about car</h2>
+						<!--div class="safety-btn"><a>NHTSA Recall Look-up</a></div-->
+						<div class="safety-text"><?php echo $vehicle_data['description']; ?></div>
+					</div>
+					<div class="key-block11">
+						<div class="card-two-bottom1">
+							<div class="safety-recalls-bottom">Warranties & MaxCare</div>
+							<div class="text-block">
+								<h1>CarMax 30-Day Limited Warranty*</h1>
+								<p>Covers all of your vehicles important systems, plus hundreds of parts inside and out. Repairs made under warranty cost you nothing parts--and labor are included.</p>
+								<a>READ MORE</a>
+							</div>
+							<div class="text-block">
+								<h1>MaxCare Extended Service Plan </h1>
+								<p>An optional MaxCare extended service plan is a great way to protect your car beyond the CarMax Limited Warranty.</p>
+								<a>READ MORE</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-----client-review start----->
+	<div class="client-review">
+		<div class="wrapper">
+			<div class="cleint-wording">
+				<ul>
+					<li>This wondercar is Car2UDirect-Certified by</li>
+					<li class="name">Brandon Domilici</li>
+				</ul>
+			</div>
+			<div class="cleint-image">
+				<img src="<?php echo base_url(); ?>assets/frontend/images/client-image.png"/>
+			</div>
+			<div class="cleint-wording-bottom">
+				<ul>
+					<li><a>Questions? Ask me!</a></li>
+					<li class="client-since">Car2udirect since July 2015</li>
+				</ul>
+			</div>
+		</div>
+	
+	</div>
+	<div class="details-quotes">
+		<div class="wrapper">
+			<p>"Believe you can, and you're halfway there"</p>
+		</div>
+	</div>
+	<!-----client-review end----->
+	
+	
+<!-----footer block----->
+<?php if(isset($footer)){ echo $footer; } ?>	
+<!-----footer main block----->
+</body>
+<script>
+$(document).ready(function(){
+	
+		$(".Base-container").niceScroll({cursorwidth: '5px',cursorcolor:"#007795", autohidemode: false, zindex: 999 });
+		
+		$('#zip_code').keyup(function() {
+			
+			var zip = $('#zip_code').val().trim();
+			if(zip.length == 5)
+			{
+				$.ajax({
+					type:'POST',
+					url:'<?php echo base_url(); ?>home/check_delivery',
+					data:'zip_code='+zip,
+					beforeSend: function() {
+						$('#loading').show();
+					},
+					success: function(result){
+						$('#loading').hide();	
+						$('#result').html(result);
+						
+					},
+					error: function(request,error) {
+						$('#loading').hide();							
+					}
+					
+					});
+			}
+			else
+			{
+				return false;
+			}
+		
+		});
+		
+		
+		$("#p_o_m").tooltip({
+			content: function() {
+				return "<div class='main-tooltip'><h2>3 months / 3,000 miles Peace of Mind</h2><div class='tool-tip-content'><p> This car2udirect car comes with a 3 months / 3,000 miles Peace of Mind complete warranty.</p></div></div>";
+			},
+			position: {
+				my: "center bottom-20",
+				at: "center top",
+				using: function( position, feedback ) {
+					$( this ).css( position );
+					$( "<div>" ).addClass( "arrow" ).addClass( feedback.vertical ).addClass( feedback.horizontal ).appendTo( this );
+				}
+			}
+		});
+		
+		$("#ten_days").tooltip({
+			content: function() {
+				return "<div class='main-tooltip'><h2>10-day money-back guarantee</h2><div class='tool-tip-content'><p> Every car2udirect car comes with car2udirect's unparalleled  10-day money-back guarantee Don't absolutely love your new car2udirect? We'll pick it up for a full refund!</p></div></div>";
+			},
+			position: {
+				my: "center bottom-20",
+				at: "center top",
+				using: function( position, feedback ) {
+					$( this ).css( position );
+					$( "<div>" ).addClass( "arrow" ).addClass( feedback.vertical ).addClass( feedback.horizontal ).appendTo( this );
+				}
+			}
+		});
+		
+		$("#full_war").tooltip({
+			content: function() {
+				return "<div class='main-tooltip'><h2>Full warranty</h2><div class='tool-tip-content'><p> This car2udirect car is covered by Chevrolet's full warranty for an additional 33 months 35,200 miles / </p></div></div>";
+			},
+			position: {
+				my: "center bottom-20",
+				at: "center top",
+				using: function( position, feedback ) {
+					$( this ).css( position );
+					$( "<div>" ).addClass( "arrow" ).addClass( feedback.vertical ).addClass( feedback.horizontal ).appendTo( this );
+				}
+			}
+		});
+		
+		$("#drive_train").tooltip({
+			content: function() {
+				return "<div class='main-tooltip'><h2>Drivetrain warranty</h2><div class='tool-tip-content'><p>  This car2udirect car is covered by  Chevrolet's drivetrain warranty for an additional 57 months / 59,200 miles  </p></div></div>";
+			},
+			position: {
+				my: "center bottom-20",
+				at: "center top",
+				using: function( position, feedback ) {
+					$( this ).css( position );
+					$( "<div>" ).addClass( "arrow" ).addClass( feedback.vertical ).addClass( feedback.horizontal ).appendTo( this );
+				}
+			}
+		});
+		
+		
+		
+			
+	
+	/*$('.list-bxslider').bxSlider({
+	  pagerCustom: '#bx-pager',
+	  nextSelector: '#slider-next',
+	  prevSelector: '#slider-prev',
+	  onSliderLoad: function(index){		
+		$(".bx-viewport").css("height","479px");		
+	},
+	  nextText: '<img src="<?php echo base_url(); ?>assets/frontend/images/arr-d1.png"/>',
+	  prevText: '<img src="<?php echo base_url(); ?>assets/frontend/images/arr-d.png"/>'
+	  
+	});*/
+	
+
+	var slides_key = getkeyFeaturedSlides();
+		
+	$(window).resize(function(){
+		var slides_key = getkeyFeaturedSlides();
+	});
+	
+	$('.icon-block-key-inner').bxSlider({
+	  pager:false,
+	  minSlides: slides_key,
+	  maxSlides: slides_key,
+	  slideWidth: 119,
+	  slideMargin: 5,
+	  moveSlides: 1,
+	  nextSelector: '.nxt',
+	  prevSelector: '.pre',	
+	  onSliderLoad: function(index){		
+		$(".icon-block-key .bx-wrapper").css("max-width","1006px");		
+	},
+	  nextText: '<img src="<?php echo base_url(); ?>assets/frontend/images/pre-arr1.png"/>',
+	  prevText: '<img src="<?php echo base_url(); ?>assets/frontend/images/pre-arr.png"/>'
+	  
+	});
+	
+	
+	
+	var realSlider= $(".list-bxslider").bxSlider({
+		speed:500,
+		pager:false,
+		nextText:'',
+		prevText:'',
+		infiniteLoop:false,
+		hideControlOnEnd:true,
+		onSlideBefore:function($slideElement, oldIndex, newIndex){
+			changeRealThumb(realThumbSlider,newIndex);
+			
+		}
+		
+	});
+	
+	var slides_num = getFeaturedSlides();
+		
+	$(window).resize(function(){
+		var slides_num = getFeaturedSlides();
+	});
+	
+	
+	
+	var realThumbSlider=$("#thumb_slider").bxSlider({
+	  minSlides: slides_num,
+	  maxSlides: slides_num,
+	  slideWidth: 127,
+	  slideMargin: 2,
+	  moveSlides: 1,
+	  pager:false,
+	  nextSelector: '#slider-next',
+	  prevSelector: '#slider-prev',
+	  speed:500,
+	  infiniteLoop:false,
+	  hideControlOnEnd:true,
+	  nextText: '<img src="<?php echo base_url(); ?>assets/frontend/images/arr-d1.png"/>',
+	  prevText: '<img src="<?php echo base_url(); ?>assets/frontend/images/arr-d.png"/>',
+	  onSlideBefore:function($slideElement, oldIndex, newIndex){
+			/*$j("#sliderThumbReal ul .active").removeClass("active");
+			$slideElement.addClass("active"); */
+
+		}
+	});
+	
+	linkRealSliders(realSlider,realThumbSlider);
+	
+	if($("#thumb_slider li").length<5){
+		$("#thumb_slider .bx-next").hide();
+	}
+
+
+});
+
+
+// sincronizza sliders realizzazioni
+function linkRealSliders(bigS,thumbS){
+	
+	$("#thumb_slider").on("click","a",function(event){
+		event.preventDefault();
+		var newIndex=$(this).attr("data-slide-index");
+		bigS.goToSlide(newIndex);
+	});
+	
+	
+
+}
+
+//slider!=$thumbSlider. slider is the realslider
+function changeRealThumb(slider,newIndex){
+	
+	var $thumbS=$("#thumb_slider");
+	$thumbS.find('.active').removeClass("active");
+	$thumbS.find('a[data-slide-index="'+newIndex+'"]').addClass("active");
+	
+	if(slider.getSlideCount()-newIndex>=5)slider.goToSlide(newIndex);
+	else slider.goToSlide(slider.getSlideCount()-5);
+
+}
+
+
+function getkeyFeaturedSlides(){	
+if($(window).width() > 1200){
+	return 8;
+}else if($(window).width() <= 1200 && $(window).width() > 1025){
+	return 8;
+}else if($(window).width() <= 1024 && $(window).width() > 991){
+	return 7;
+}else if($(window).width() <= 768 && $(window).width() > 640){
+	return 5;	
+}else if($(window).width() <= 640 && $(window).width() > 481){
+	return 4;	
+}else if($(window).width() <= 550 && $(window).width() > 360){
+	return 3;
+}else if($(window).width() <= 360 && $(window).width() > 319){
+	
+	return 2;
+}
+return 8;
+
+}
+
+function getFeaturedSlides(){
+	
+if($(window).width() > 1200){
+	return 5;
+}else if($(window).width() <= 1200 && $(window).width() > 768){
+	return 5;
+}else if($(window).width() <= 768 && $(window).width() > 640){
+	return 5;	
+}else if($(window).width() <= 640 && $(window).width() > 481){
+	return 4;	
+}else if($(window).width() <= 550 && $(window).width() > 360){
+	return 3;
+}else if($(window).width() <= 360 && $(window).width() > 319){
+	return 2;
+}
+return 5;
+
+}
+        
+</script>
+</html>	

@@ -1,0 +1,242 @@
+<?php
+
+class Admin extends Controller {
+
+	function Admin()
+	{	
+		parent::Controller();	
+		$this->load->model('admin_model');
+		if(!$this->session->userdata('admin_logged_in'))
+		{
+			redirect(base_url().'admin/login');
+		}
+	}
+	
+	public function index()
+	{
+		$this->dashboard();
+		
+	}
+	
+	public function dashboard()
+	{
+		$data=array();
+		$data['page_title'] = 'Manage Hospital';
+		$data['page']='dashboard';
+		$admin_id=$this->session->userdata('admin_id');
+		$data['interpreter_data']=$this->admin_model->get_admin_data($admin_id);
+		$data['hospital_data']=$this->admin_model->get_hospital_data();
+		$data['body'] = $this->load->view('admin/dashboard', $data , true);
+		$this->load->view('admin/template',$data);
+	}
+	public function manage_interpreter()
+	{
+		
+		$data=array();
+		$data['page_title'] = 'Manage Interpreter';
+		$data['page']='summary';
+		$admin_id=$this->session->userdata('admin_id');
+		$data['interpreter_data']=$this->admin_model->get_admin_data($admin_id);
+		$data['body'] = $this->load->view('admin/manage_interpreter', $data , true);
+		$this->load->view('admin/template',$data);
+		
+	}
+	
+	public function manage_employee()
+	{
+		$data=array();
+		$data['page_title'] = 'Manage Employee';
+		$data['page']='summary';
+		$admin_id=$this->session->userdata('admin_id');
+		$data['interpreter_data']=$this->admin_model->get_admin_data($admin_id);
+		$data['body'] = $this->load->view('admin/manage_employee', $data , true);
+		$this->load->view('admin/template',$data);
+	}
+	
+	public function upd_hospital()
+	{
+		//$interpreter_id=$this->session->userdata('admin_id');
+		$interpreter_id=2;
+		$this->load->helper('form');
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('hospitalname','hospitalname', 'trim|required');
+		if ($this->form_validation->run() == true)
+			{
+				 if($this->admin_model->addHospital()==1)
+					{
+						$this->session->set_flashdata('success',"Hospital has been updated successfully.");
+						redirect(base_url().'admin/add_hospital');
+						exit;
+					}
+					else
+					{
+						$this->session->set_flashdata('fail',"Invalid Request.");
+						redirect(base_url().'admin/add_hospital');
+						exit;
+					}
+			}
+			
+		$data=array();
+		$data['page']='edit_profile';
+		$edit_id = $this->uri->segment(3, 0);
+		if($edit_id!='' && is_numeric)
+		$data['hospital_data']=$this->admin_model->get_admin_data();
+		
+		if($data['hospital_data'])
+		{
+		 $data['page_title'] = 'Edit Hospital';
+		}
+		else
+		{
+		 $data['page_title'] = 'Add Hospital';
+		}
+		
+		$data['body'] = $this->load->view('admin/add_hospital', $data, true);
+		$this->load->view('admin/template',$data);
+	}
+	
+	public function add_interpreter()
+	{
+		//$interpreter_id=$this->session->userdata('admin_id');
+		$interpreter_id=2;
+		$this->load->helper('form');
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('email','email', 'trim|required');
+		if ($this->form_validation->run() == true)
+			{
+				 if($this->admin_model->addInterpreter()==1)
+					{
+						$this->session->set_flashdata('success',"Interpreter has been updated successfully.");
+						redirect(base_url().'admin/add_hospital');
+						exit;
+					}
+					else
+					{
+						$this->session->set_flashdata('fail',"Invalid Request.");
+						redirect(base_url().'admin/add_hospital');
+						exit;
+					}
+			}
+			
+		$data=array();
+		$data['page']='edit_profile';
+		$data['interpreter_data']=$this->admin_model->get_admin_data($interpreter_id);
+		$data['page_title'] = 'Add Interpreter';
+		$data['body'] = $this->load->view('admin/add_interpreter', $data, true);
+		$this->load->view('admin/template',$data);
+	}
+	
+	/*
+	public function edit_logo_image()
+	{
+		$res = $this->interpreter_model->update_logo();
+		 if($res == true) {
+			echo true;
+		 } else {
+			 echo false;
+		 }
+	}
+	
+	public function password_check($password)
+	{
+		$interpreter_id=$this->session->userdata('interpreter_id');
+		$resp=$this->interpreter_model->check_password($password,$interpreter_id);
+		if ($resp)
+		{
+			return TRUE;
+		}
+		else
+		{
+			$this->form_validation->set_message('password_check', 'Please enter correct password.');
+			return FALSE;
+		}
+	}
+	public function email_check($email)
+	{
+		$interpreter_id=$this->session->userdata('interpreter_id');
+		$resp=$this->interpreter_model->check_email($email,$interpreter_id);
+		if ($resp)
+		{
+			$this->form_validation->set_message('email_check', 'Account exists with this email address. Please try again.');
+			return FALSE;
+			
+		}
+		else
+		{
+			return TRUE;
+		}
+	}
+	
+	public function incoming_call_status()
+	{
+		$incomingCallData = $this->interpreter_model->incomingcallstatus();
+		$allCalls = array();
+		$finalCalls = array();
+		$chatId=array();
+		$i=0;
+		//print('<pre>');
+		//echo empty($incomingCallData);
+		//print_r($incomingCallData); 
+		//die();
+		
+		if(empty($incomingCallData)){
+			$finalCalls = array('status'=>0,'callId'=>'','callinfo'=>'');
+			echo json_encode($finalCalls);
+		}else{
+		foreach ($incomingCallData as $row)
+				{
+					$i++;
+					$chatSessionId = $row->chat_session_id;
+					//$callerName = $row->staff_id;
+					$callerName = $row->staff_name;
+					
+					$callerMode = $row->chat_session_id;
+					$callerLanguage = $row->chat_session_id;
+					$allCalls[$chatSessionId] = array('chatSessionId'=>$chatSessionId,'callerName'=>$callerName);
+				   $chatId['callId'.$i]=$row->chat_session_id;
+				} 
+				$finalCalls = array('status'=>1,'callId'=>$chatId,'callinfo'=>$allCalls);
+				echo json_encode($finalCalls);
+			}
+	}
+	
+	
+	public function callAnswer()
+	{
+		$id=$_POST['id'];
+		$incomingCallData = $this->interpreter_model->callAnswer($id);
+		echo $incomingCallData;
+	}
+	
+	public function callEnd()
+	{
+		$id=$_POST['id'];
+		$callEnd = $this->interpreter_model->callEnd($id);
+		echo $callEnd;
+	}
+	
+	public function callCanle()
+	{
+		$id=$_POST['id'];
+		$callCanle = $this->interpreter_model->callCanle($id);
+		echo $callCanle;
+	}
+	
+	
+	public function callState($chatId = null)
+	{
+        $id = end($this->uri->segment_array());
+        $callStateInfo = $this->interpreter_model->callState($id);
+		$callInformationArray = array('chatId'=>$id,'callStatus'=>$callStateInfo->call_status);
+		echo json_encode($callInformationArray);
+	}
+	public function select_interpreter_status()
+	{
+		$res = $this->interpreter_model->change_interpreter_status();
+		if ($res) {
+			echo $res;
+		}
+	}*/
+	
+}
+

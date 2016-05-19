@@ -1,0 +1,152 @@
+<form method="post" name="add_vehicle_frm" id="add_vehicle_frm" enctype="multipart/form-data"> 
+		<div class="account-right-div">
+			<div class="dashboard-heading">
+				<h2>
+					<?php echo $page_title; ?>
+				</h2>
+			</div>
+			<div class="dashboard-inner">
+				<div class="main-dash-summry Edit-profile view-vehicle">
+									
+					<div class="input-row">
+						<div class="full">
+							<div class="input-block">
+								<label>Year :  </label>
+								<span class='reg_span'>
+									<?php echo $vehicle_data['year'];  ?>
+								</span>
+							</div>
+						</div>
+					</div>
+					
+					<div class="input-row">
+						<div class="full">
+							<div class="input-block">
+								<label>Make :  </label>
+								<span class='reg_span'>
+									<?php echo $vehicle_data['make'];  ?>
+								</span>
+							</div>
+						</div>
+					</div>
+					
+					
+					<div class="input-row">
+						<div class="full">
+							<div class="input-block">
+								<label>Model :  </label>
+								<span class='reg_span'>
+									<?php echo $vehicle_data['model'];  ?>
+								</span>
+							</div>
+						</div>
+					</div>
+					
+					<div class="input-row">
+						<div class="full">
+							<div class="input-block">
+								<label>Color :  </label>
+								<span class='reg_span'>
+									<?php echo $vehicle_data['color'];  ?>									
+								</span>
+							</div>
+						</div>
+					</div>
+					
+					<div class="input-row">
+						<div class="full">
+							<div class="input-block">
+								<label>Mileage :  </label>
+								<span class='reg_span'>
+									<?php echo $vehicle_data['mileage'];  ?>
+								</span>
+							</div>
+						</div>
+					</div>
+					
+					<div class="input-row">
+						<div class="full">
+							<div class="input-block">
+								<label>Zip Code :  </label>
+								<span class='reg_span'>
+									<?php echo $vehicle_data['zip_code'];  ?>	
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="input-row">
+						<div class="full">
+							<div class="input-block">
+								<label >True Market Value Price :  </label>
+								<span class='reg_span'>
+									<?php echo $vehicle_data['tmv_price'];  ?>	
+							</div>
+						</div>
+					</div>
+					
+					<div class="input-row">
+						<div class="full">
+							<div class="input-block">
+								<label>Private Party Price :  </label>
+								<span class='reg_span'>
+									<?php echo $vehicle_data['pp_price'];  ?>		
+								</span>
+							</div>
+						</div>
+					</div>
+					
+					<div class="input-row">
+						<div class="full">
+							<div class="input-block">
+								<label>Trade-in Price :  </label>
+								<span class='reg_span'>
+									<?php echo $vehicle_data['tradein_price'];  ?>										
+								</span>
+							</div>
+						</div>
+					</div>
+					
+					<div class="input-row">
+						<div class="full">
+							<div class="input-block">
+								<label>Your Price :  </label>
+								<span class='reg_span'>
+									<?php echo $vehicle_data['our_price'];  ?>	
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="input-row">
+						<div class="full">
+							<div class="input-block">
+								<label>Description :  </label>
+								<span class='reg_span'>
+									<?php echo $vehicle_data['description'];  ?>
+								</span>	
+							</div>
+						</div>
+					</div>
+					<div class="input-row" >
+						<div class="full">
+							<div class="input-block">
+								<label>Images :  </label>
+								<span class='reg_span'>
+								
+								</span>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	</form>
+	
+<script type="text/javascript">
+	  
+	  function cancelButton()
+	  {
+		location.assign("<?php echo base_url(); ?>cdadmin/manage_vehicle");
+	  } 
+	</script>
+
